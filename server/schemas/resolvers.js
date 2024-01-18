@@ -13,7 +13,61 @@ const resolvers = {
     },
 
     Mutation: {
-        
+
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
+      
+            if (!user) {
+              throw AuthenticationError;
+            }
+      
+            const correctPw = await user.isCorrectPassword(password);
+      
+            if (!correctPw) {
+              throw AuthenticationError;
+            }
+      
+            const token = signToken(user);
+      
+            return { token, user };
+          },
+
+          addUser: async (parent, { username, email, password }) => {
+            const user = await User.create({ username, email, password });
+            const token = signToken(user);
+            return { token, user };
+          },
+
+          saveBook: async (parent, { input }, context) => {
+            if (context.user) {
+                // need to see if savedBooks:input works or if I need to spread the data
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { savedBooks: input } },
+                    { new: true, runValidators: true }
+                )
+                return updatedUser;
+            }
+            throw AuthenticationError;
+          },
+
+        //   removeBook: async (parent, { thoughtId }, context) => {
+        //     if (context.user) {
+        //       const thought = await Thought.findOneAndDelete({
+        //         _id: thoughtId,
+        //         thoughtAuthor: context.user.username,
+        //       });
+      
+        //       await User.findOneAndUpdate(
+        //         { _id: context.user._id },
+        //         { $pull: { thoughts: thought._id } }
+        //       );
+      
+        //       return thought;
+        //     }
+        //     throw AuthenticationError;
+        //   },
+          
     },
 };
 
