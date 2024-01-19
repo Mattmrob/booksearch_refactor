@@ -33,9 +33,9 @@ const resolvers = {
           },
 
           addUser: async (parent, { username, email, password }) => {
-            console.log("checkpoint A")
+            console.log("checkpoint A - not working")
             const user = await User.create({ username, email, password });
-            console.log("checkpoint B")
+            console.log("checkpoint B - not working")
             const token = signToken(user);
             return { token, user };
           },

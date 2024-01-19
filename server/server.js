@@ -8,9 +8,8 @@ const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
-const app = express();
 const PORT = process.env.PORT || 3001;
-// define apollo server using typedefs and resolvers
+const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -34,12 +33,13 @@ const startApolloServer = async () => {
     app.use(express.static(path.join(__dirname, '../client/build')));
 
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+      res.sendFile(path.join(__dirname, '../client/build/index.html'));
     });
   }
 
   db.once('open', () => {
-    app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+    app.listen(PORT, () => 
+    console.log(`🌍 Now listening on localhost:${PORT}`));
     console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
   });
 };
