@@ -39,14 +39,24 @@ const resolvers = {
           },
 
           saveBook: async (parent, args, context) => {
+            console.log("checkpoint 1");
             if (context.user) {
-                // need to see if savedBooks:input works or if I need to spread the data
-                const updatedUser = await User.findOneAndUpdate(
+                const user = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: args } },
+                    { $addToSet: { 
+                        savedBooks: {
+                          bookId: args.bookId,
+                          authors: args.authors,
+                          description: args.description,
+                          title: args.title,
+                          image: args.image,
+                          link: args.link
+                        }
+                      } 
+                    },
                     { new: true, runValidators: true }
                 );
-                return updatedUser;
+                return user;
             }
             throw AuthenticationError;
           },
