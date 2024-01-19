@@ -38,19 +38,27 @@ const resolvers = {
             return { token, user };
           },
 
-          saveBook: async (parent, args, context) => {
+          saveBook: async (parent, {
+              bookId,
+              authors,
+              description,
+              title,
+              image,
+              link
+            }, context) => {
             console.log("checkpoint 1");
+            console.log(context.user)
             if (context.user) {
                 const user = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $addToSet: { 
                         savedBooks: {
-                          bookId: args.bookId,
-                          authors: args.authors,
-                          description: args.description,
-                          title: args.title,
-                          image: args.image,
-                          link: args.link
+                          bookId: bookId,
+                          authors: authors,
+                          description: description,
+                          title: title,
+                          image: image,
+                          link: link
                         }
                       } 
                     },
