@@ -38,12 +38,12 @@ const resolvers = {
             return { token, user };
           },
 
-          saveBook: async (parent, { input }, context) => {
+          saveBook: async (parent, args, context) => {
             if (context.user) {
                 // need to see if savedBooks:input works or if I need to spread the data
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: input } },
+                    { $addToSet: { savedBooks: args } },
                     { new: true, runValidators: true }
                 );
                 return updatedUser;
