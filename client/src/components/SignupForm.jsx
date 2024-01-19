@@ -22,7 +22,6 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(userFormData)
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
@@ -32,10 +31,11 @@ const SignupForm = () => {
     }
 
     try {
+      // our request is hitting this addUser mutation then dying
       const { data } = await addUser({ variables: { ...userFormData } });
       Auth.login(data.addUser.token);
     } catch (err) {
-      console.error(err);
+      console.error(err, error);
       setShowAlert(true);
     }
 

@@ -28,12 +28,14 @@ const resolvers = {
             }
       
             const token = signToken(user);
-      
+            console.log(token);
             return { token, user };
           },
 
           addUser: async (parent, { username, email, password }) => {
+            console.log("checkpoint A")
             const user = await User.create({ username, email, password });
+            console.log("checkpoint B")
             const token = signToken(user);
             return { token, user };
           },
