@@ -2,6 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
+const { authMiddleware } = require('./utils/auth');
 
 // create schema directory to replace routes directory
 const { typeDefs, resolvers } = require('./schemas');
@@ -32,7 +33,9 @@ const startApolloServer = async () => {
   }
 
   // graphql middleware wrapped in apollo server
-  app.use('/graphql', expressMiddleware(server));
+  app.use('/graphql', expressMiddleware(server, {
+    context: authMiddleware
+  }));
 
   db.once('open', () => {
     app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));

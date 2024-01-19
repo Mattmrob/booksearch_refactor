@@ -47,7 +47,9 @@ const resolvers = {
               link
             }, context) => {
             console.log("checkpoint 1");
-            console.log(context.user)
+            console.log(context);
+            console.log(context.user);
+            // CONTEXT IS CURRENTLY RETURNING AS UNDEFINED - needs to return logged in user
             if (context.user) {
                 const user = await User.findOneAndUpdate(
                     { _id: context.user._id },
